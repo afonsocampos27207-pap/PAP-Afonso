@@ -1,1 +1,25 @@
-/* CSS do projeto */
+body{font-family:Arial;margin:0;background:#f4f4f4}
+header{background:#0b4f32;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;}
+nav a{color:white;margin-left:15px;text-decoration:none;font-weight:bold;cursor:pointer;}
+.logo-box{font-weight:bold;font-size:26px;cursor:pointer;}
+.top-search{padding:6px;border:none;border-radius:5px;margin-right:15px;}
+.container{max-width:1300px;margin:auto;padding:15px;display:flex;gap:20px}
+.search-panel{background:white;width:260px;padding:15px;border-radius:8px;box-shadow:0 0 8px rgba(0,0,0,.1);height:max-content}
+.search-panel h3{margin-top:0}
+.search-panel label{font-size:14px;margin-top:10px;display:block}
+.search-panel select, .search-panel input{width:100%;padding:6px;margin-top:3px;box-sizing:border-box;}
+.grid{flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:15px}
+.card{background:white;border-radius:8px;box-shadow:0 0 8px rgba(0,0,0,.1);overflow:hidden}
+.card img{width:100%;height:160px;object-fit:cover}
+.card-body{padding:10px}
+button{background:#0b4f32;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;margin-top:8px}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center}
+.modal{background:white;padding:20px;border-radius:10px;width:90%;max-width:500px}
+#anunciar-page{display:none;background:white;padding:20px;border-radius:10px;box-shadow:0 0 8px rgba(0,0,0,.2);max-width:900px;margin:20px auto}
+.form-grid{display:flex;gap:20px}
+.form-left{flex:1}
+.form-right{flex:1}
+.form-left label{display:block;margin-top:10px}
+.form-left input, .form-left select, .form-right textarea{width:100%;padding:6px;margin-top:3px}
+.photo-box{width:100%;height:200px;border:2px dashed #aaa;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;background:#fafafa;cursor:pointer;text-align:center;}
+#imgPreview{max-width:100%;max-height:100%;object-fit:cover;display:none;}

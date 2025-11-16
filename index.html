@@ -48,7 +48,7 @@
     .form-right{flex:1}
     .form-left label{display:block;margin-top:10px}
     .form-left input, .form-left select, .form-right textarea{width:100%;padding:6px;margin-top:3px}
-
+    
     .photo-box{
       width:100%;
       height:200px;
@@ -92,10 +92,11 @@
     <h3>Pesquisar</h3>
 
     <label>Zona:</label>
-    <input id="f_zona" type="text" placeholder="Ex: Porto">
+    <input id="f_zona" type="text">
 
     <label>Tipo de animal:</label>
-    <select id="f_tipo">
+    <select>
+      <option selected disabled>Escolher</option>
       <option value="todos">Todos</option>
       <option value="Cão">Cão</option>
       <option value="Gato">Gato</option>
@@ -103,20 +104,22 @@
     </select>
 
     <label>Raça:</label>
-    <input id="f_raca" type="text" placeholder="Ex: Labrador">
+    <input id="f_raca" type="text">
 
-    <label>Idade máxima:</label>
-    <input id="f_idade" type="number" placeholder="Ex: 5">
+    <label>Idade:</label>
+    <input id="f_idade" type="number">
 
     <label>Sexo:</label>
-    <select id="f_sexo">
+    <select>
+      <option selected disabled>Escolher</option>
       <option>Ambos</option>
       <option>Macho</option>
       <option>Fêmea</option>
     </select>
 
     <label>Tamanho:</label>
-    <select id="f_tamanho">
+    <select>
+      <option selected disabled>Escolher</option>
       <option>Todos</option>
       <option>Pequeno</option>
       <option>Médio</option>
@@ -124,7 +127,7 @@
     </select>
 
     <label>Cor:</label>
-    <input id="f_cor" type="text" placeholder="Ex: Preto">
+    <input id="f_cor" type="text">
 
     <button onclick="filtrar()" style="width:100%;margin-top:15px">Aplicar Filtros</button>
   </aside>
@@ -211,7 +214,6 @@
         <option>Sim</option>
         <option>Não</option>
       </select>
-
     </div>
 
     <div class="form-right">
@@ -223,11 +225,12 @@
       <input id="foto_input" type="file" accept="image/*" style="display:none" onchange="previewFoto(event)">
 
       <label>Descrição:</label>
-      <textarea rows="12"></textarea>
+      <textarea id="a_desc" rows="12"></textarea>
     </div>
   </div>
 
-  <button style="margin-top:20px;width:100%;font-size:18px;padding:10px;background:#0b4f32;color:white;border:none;border-radius:6px;cursor:pointer">
+  <button onclick="adicionarAnimal()" 
+  style="margin-top:20px;width:100%;font-size:18px;padding:10px;background:#0b4f32;color:white;border:none;border-radius:6px;cursor:pointer">
     Anunciar
   </button>
 
@@ -251,7 +254,7 @@ const animals=[
   {id:"12",nome:"Lola",especie:"Coelho",idade:1,sexo:"Fêmea",tamanho:"Pequeno",cor:"Castanho",zona:"Leiria",raca:"Mini Rex",img:"",historia:"Muito tímida mas carinhosa."},
   {id:"13",nome:"Rocky",especie:"Cão",idade:5,sexo:"Macho",tamanho:"Grande",cor:"Preto",zona:"Faro",raca:"Rottweiler",img:"",historia:"Protector e muito leal."},
   {id:"14",nome:"Moka",especie:"Gato",idade:4,sexo:"Fêmea",tamanho:"Médio",cor:"Castanho",zona:"Coimbra",raca:"Siamês",img:"",historia:"Muito calma e carinhosa."},
-  {id:"15",nome:"Zeus",especie:"Cão",idade:3,sexo:"Macho",tamanho:"Grande",cor:"Branco",zona:"Lisboa",raca:"Pastor Branco",img:"",historia:"Amigável e brincalhão."}
+  {id:"15",nome:"Zeus",especie:"Coelho",idade:1,sexo:"Macho",tamanho:"Médio",cor:"Mini Rex",zona:"Lisboa",raca:"Pastor Branco",img:"",historia:"Amigável e calmo."}
 ];
 
 function renderList(list){
@@ -276,19 +279,28 @@ function openModal(id){
   const a=animals.find(x=>x.id===id);
   const modal=document.getElementById("modal-root");
   modal.style.display="block";
-  modal.innerHTML=
+  modal.innerHTML =
   `<div class='modal-bg' onclick='closeModal(event)'>
-      <div class='modal' onclick='event.stopPropagation()'>
-        <h2>${a.nome}</h2>
-        <p><strong>Espécie:</strong> ${a.especie}</p>
-        <p><strong>Idade:</strong> ${a.idade} anos</p>
-        <p><strong>Raça:</strong> ${a.raca}</p>
-        <p>${a.historia}</p>
-        <p><strong>Contacto:</strong> 915240059</p>
-        <p><strong>Email:</strong> coracaoanimal@gmail.com</p>
-        <button onclick='closeModal()'>Fechar</button>
-      </div>
-   </div>`;
+    <div class='modal' onclick='event.stopPropagation()'>
+      <h2>${a.nome}</h2>
+
+      <p><strong>Espécie:</strong> ${a.especie}</p>
+      <p><strong>Idade:</strong> ${a.idade} anos</p>
+      <p><strong>Raça:</strong> ${a.raca}</p>
+
+      ${a.vacinas ? `<p><strong>Vacinas:</strong> ${a.vacinas}</p>` : ""}
+      ${a.esterilizado ? `<p><strong>Esterilizado:</strong> ${a.esterilizado}</p>` : ""}
+      ${a.desparasitado ? `<p><strong>Desparasitado:</strong> ${a.desparasitado}</p>` : ""}
+
+      <p><strong>Contacto:</strong> 915240059</p>
+      <p><strong>Email:</strong> coracaoanimal@gmail.com</p>
+
+      <p><strong>História:</strong> ${a.historia}</p>
+
+      <button onclick='closeModal()'>Fechar</button>
+    </div>
+</div>`;
+
 }
 
 function closeModal(){document.getElementById("modal-root").style.display="none";}
@@ -301,7 +313,7 @@ function filtrar(){
       sexo=f_sexo.value,
       tamanho=f_tamanho.value,
       cor=f_cor.value.toLowerCase();
-
+  
   renderList(animals.filter(a=> 
     (zona===""||a.zona.toLowerCase().includes(zona)) &&
     (tipo==="todos"||a.especie===tipo) &&
@@ -340,6 +352,51 @@ function previewFoto(event){
   img.src = URL.createObjectURL(file);
   img.style.display = "block";
   texto.style.display = "none";
+}
+
+function adicionarAnimal() {
+  const nome = a_nome.value;
+  const especie = a_tipo.value;
+  const idade = Number(a_idade.value);
+  const sexo = a_sexo.value;
+  const raca = a_raca.value;
+  const tamanho = a_tamanho.value;
+  const cor = a_cor.value;
+  const desc = a_desc.value;
+
+  const vacinas = a_vacinas.value;
+  const esterilizado = a_esterilizado.value;
+  const desparasitado = a_desparasitado.value;
+
+  const fotoInput = document.getElementById("foto_input");
+  let fotoURL = "";
+  if (fotoInput.files.length > 0) {
+    fotoURL = URL.createObjectURL(fotoInput.files[0]);
+  }
+
+  const novoAnimal = {
+    id: String(animals.length + 1),
+    nome,
+    especie,
+    idade,
+    sexo,
+    tamanho,
+    cor,
+    zona: "Não indicado",
+    raca,
+    img: fotoURL,
+    historia: desc,
+    vacinas,
+    esterilizado,
+    desparasitado
+  };
+
+  animals.push(novoAnimal);
+
+  renderList(animals);
+  showHome();
+
+  alert("Animal anunciado com sucesso!");
 }
 </script>
 
