@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coração Animal</title>
+  <style>
+    body{font-family:Arial;margin:0;background:#f4f4f4}
+
+    header{
+      background:#0b4f32;
+      color:white;
+      padding:15px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    nav a{
+      color:white;
+      margin-left:15px;
+      text-decoration:none;
+      font-weight:bold;
+      cursor:pointer;
+    }
+    .logo-box{
+      font-weight:bold;
+      font-size:26px;
+      cursor:pointer;
+    }
+    .top-search{padding:6px;border:none;border-radius:5px;margin-right:15px;}
+    .container{max-width:1300px;margin:auto;padding:15px;display:flex;gap:20px}
+    .search-panel{background:white;width:260px;padding:15px;border-radius:8px;box-shadow:0 0 8px rgba(0,0,0,.1);height:max-content}
+    .search-panel h3{margin-top:0}
+    .search-panel label{font-size:14px;margin-top:10px;display:block}
+    .search-panel select, .search-panel input{width:100%;padding:6px;margin-top:3px}
+    .grid{flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:15px}
+    .card{background:white;border-radius:8px;box-shadow:0 0 8px rgba(0,0,0,.1);overflow:hidden}
+    .card img{width:100%;height:160px;object-fit:cover}
+    .card-body{padding:10px}
+    button{background:#0b4f32;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;margin-top:8px}
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center}
+    .modal{background:white;padding:20px;border-radius:10px;width:90%;max-width:500px}
+
+    /* Página Anunciar */
+    #anunciar-page{display:none;background:white;padding:20px;border-radius:10px;box-shadow:0 0 8px rgba(0,0,0,.2);max-width:900px;margin:20px auto}
+    .form-grid{display:flex;gap:20px}
+    .form-left{flex:1}
+    .form-right{flex:1}
+    .form-left label{display:block;margin-top:10px}
+    .form-left input, .form-left select, .form-right textarea{width:100%;padding:6px;margin-top:3px}
+
+    .photo-box{
+      width:100%;
+      height:200px;
+      border:2px dashed #aaa;
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:10px;
+      background:#fafafa;
+      cursor:pointer;
+      text-align:center;
+    }
+
+    #imgPreview{
+      max-width:100%;
+      max-height:100%;
+      object-fit:cover;
+      display:none;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-box" onclick="showHome()">Coração Animal</div>
+
+  <nav>
+    <input id="pesquisa_topo" class="top-search" type="text" placeholder="Procurar animal..." onkeyup="pesquisaTopo()">
+    <a onclick="showHome()">Página Inicial</a>
+    <a onclick="showAnunciar()">Anunciar</a>
+    <a>Associações</a>
+    <a>Ajuda</a>
+    <a>Acerca</a>
+  </nav>
+</header>
+
+<div id="home-section">
+<div class="container">
+  <aside class="search-panel">
+    <h3>Pesquisar</h3>
+
+    <label>Zona:</label>
+    <input id="f_zona" type="text" placeholder="Ex: Porto">
+
+    <label>Tipo de animal:</label>
+    <select id="f_tipo">
+      <option value="todos">Todos</option>
+      <option value="Cão">Cão</option>
+      <option value="Gato">Gato</option>
+      <option value="Coelho">Coelho</option>
+    </select>
+
+    <label>Raça:</label>
+    <input id="f_raca" type="text" placeholder="Ex: Labrador">
+
+    <label>Idade máxima:</label>
+    <input id="f_idade" type="number" placeholder="Ex: 5">
+
+    <label>Sexo:</label>
+    <select id="f_sexo">
+      <option>Ambos</option>
+      <option>Macho</option>
+      <option>Fêmea</option>
+    </select>
+
+    <label>Tamanho:</label>
+    <select id="f_tamanho">
+      <option>Todos</option>
+      <option>Pequeno</option>
+      <option>Médio</option>
+      <option>Grande</option>
+    </select>
+
+    <label>Cor:</label>
+    <input id="f_cor" type="text" placeholder="Ex: Preto">
+
+    <button onclick="filtrar()" style="width:100%;margin-top:15px">Aplicar Filtros</button>
+  </aside>
+
+  <section id="animals" class="grid"></section>
+</div>
+</div>
+
+<!-- Página Anunciar -->
+<div id="anunciar-page">
+  <h2>Informações sobre o animal</h2>
+  <div class="form-grid">
+
+    <div class="form-left">
+      <label>Nome do animal:</label>
+      <input type="text">
+
+      <label>Tipo de animal:</label>
+      <select>
+        <option selected disabled>Escolher</option>
+        <option>Cão</option>
+        <option>Gato</option>
+        <option>Coelho</option>
+      </select>
+
+      <label>Idade:</label>
+      <select>
+        <option selected disabled>Escolher</option>
+        <option>1 ano</option>
+        <option>2 anos</option>
+        <option>3 anos</option>
+        <option>4 anos</option>
+        <option>5+ anos</option>
+      </select>
+
+      <label>Sexo:</label>
+      <select>
+        <option selected disabled>Escolher</option>
+        <option>Macho</option>
+        <option>Fêmea</option>
+      </select>
+
+      <label>Raça:</label>
+      <input type="text">
+
+      <label>Tamanho:</label>
+      <select>
+        <option selected disabled>Escolher</option>
+        <option>Pequeno</option>
+        <option>Médio</option>
+        <option>Grande</option>
+      </select>
+
+      <label>Cor:</label>
+      <select>
+        <option selected disabled>Escolher</option>
+        <option>Preto</option>
+        <option>Branco</option>
+        <option>Castanho</option>
+        <option>Cinzento</option>
+        <option>Laranja</option>
+        <option>Bege</option>
+        <option>Outro</option>
+      </select>
+
+      <label>Desparasitado:</label>
+      <select>
+        <option selected disabled>Escolher</option>
+        <option>Sim</option>
+        <option>Não</option>
+      </select>
+
+      <label>Vacinas:</label>
+      <select>
+        <option selected disabled>Escolher</option>
+        <option>Completo</option>
+        <option>Em falta</option>
+        <option>Nenhuma</option>
+      </select>
+
+      <label>Esterilizado:</label>
+      <select>
+        <option selected disabled>Escolher</option>
+        <option>Sim</option>
+        <option>Não</option>
+      </select>
+
+    </div>
+
+    <div class="form-right">
+      <label>Fotografia:</label>
+      <div class="photo-box" onclick="document.getElementById('foto_input').click()">
+        <img id="imgPreview">
+        <span id="foto_texto">Clique para adicionar foto</span>
+      </div>
+      <input id="foto_input" type="file" accept="image/*" style="display:none" onchange="previewFoto(event)">
+
+      <label>Descrição:</label>
+      <textarea rows="12"></textarea>
+    </div>
+  </div>
+
+  <button style="margin-top:20px;width:100%;font-size:18px;padding:10px;background:#0b4f32;color:white;border:none;border-radius:6px;cursor:pointer">
+    Anunciar
+  </button>
+
+</div>
+
+<div id="modal-root" style="display:none"></div>
+
+<script>
+const animals=[
+  {id:"1",nome:"Luna",especie:"Gato",idade:2,sexo:"Fêmea",tamanho:"Pequeno",cor:"Cinzento",zona:"Porto",raca:"Europeu",img:"",historia:"Resgatada da rua, recuperou totalmente."},
+  {id:"2",nome:"Rex",especie:"Cão",idade:4,sexo:"Macho",tamanho:"Grande",cor:"Castanho",zona:"Lisboa",raca:"Labrador",img:"",historia:"Foi deixado no abrigo, muito brincalhão."},
+  {id:"3",nome:"Kiki",especie:"Coelho",idade:1,sexo:"Fêmea",tamanho:"Pequeno",cor:"Branco",zona:"Braga",raca:"Anão",img:"",historia:"Resgatada de um quintal sem condições."},
+  {id:"4",nome:"Thor",especie:"Cão",idade:3,sexo:"Macho",tamanho:"Médio",cor:"Preto",zona:"Coimbra",raca:"Pastor Alemão",img:"",historia:"Viviu acorrentado, agora procura família."},
+  {id:"5",nome:"Mimi",especie:"Gato",idade:5,sexo:"Fêmea",tamanho:"Pequeno",cor:"Laranja",zona:"Porto",raca:"Europeu",img:"",historia:"Abandonada, muito carinhosa."},
+  {id:"6",nome:"Bolt",especie:"Cão",idade:2,sexo:"Macho",tamanho:"Grande",cor:"Branco",zona:"Faro",raca:"Husky",img:"",historia:"Resgatado de maus tratos."},
+  {id:"7",nome:"Nina",especie:"Gato",idade:1,sexo:"Fêmea",tamanho:"Pequeno",cor:"Preto",zona:"Lisboa",raca:"Europeu",img:"",historia:"Muito meiga e sociável."},
+  {id:"8",nome:"Snow",especie:"Coelho",idade:2,sexo:"Macho",tamanho:"Pequeno",cor:"Branco",zona:"Aveiro",raca:"Anão",img:"",historia:"Adora receber carinho."},
+  {id:"9",nome:"Duke",especie:"Cão",idade:6,sexo:"Macho",tamanho:"Grande",cor:"Bege",zona:"Setúbal",raca:"Golden Retriever",img:"",historia:"Muito dócil com crianças."},
+  {id:"10",nome:"Bella",especie:"Gato",idade:3,sexo:"Fêmea",tamanho:"Pequeno",cor:"Branco",zona:"Braga",raca:"Persa",img:"",historia:"Resgatada muito doente, já recuperou."},
+  {id:"11",nome:"Max",especie:"Cão",idade:2,sexo:"Macho",tamanho:"Médio",cor:"Cinzento",zona:"Porto",raca:"Pitbull",img:"",historia:"Cheio de energia e muito fiel."},
+  {id:"12",nome:"Lola",especie:"Coelho",idade:1,sexo:"Fêmea",tamanho:"Pequeno",cor:"Castanho",zona:"Leiria",raca:"Mini Rex",img:"",historia:"Muito tímida mas carinhosa."},
+  {id:"13",nome:"Rocky",especie:"Cão",idade:5,sexo:"Macho",tamanho:"Grande",cor:"Preto",zona:"Faro",raca:"Rottweiler",img:"",historia:"Protector e muito leal."},
+  {id:"14",nome:"Moka",especie:"Gato",idade:4,sexo:"Fêmea",tamanho:"Médio",cor:"Castanho",zona:"Coimbra",raca:"Siamês",img:"",historia:"Muito calma e carinhosa."},
+  {id:"15",nome:"Zeus",especie:"Cão",idade:3,sexo:"Macho",tamanho:"Grande",cor:"Branco",zona:"Lisboa",raca:"Pastor Branco",img:"",historia:"Amigável e brincalhão."}
+];
+
+function renderList(list){
+  const root=document.getElementById("animals");
+  root.innerHTML="";
+  list.forEach(a=>{
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=
+    `<img src="${a.img}">
+     <div class="card-body">
+       <strong>${a.nome}</strong><br>
+       Espécie: ${a.especie}<br>
+       Idade: ${a.idade} anos<br>
+       <button onclick="openModal('${a.id}')">Ver História</button>
+     </div>`;
+    root.appendChild(div);
+  });
+}
+
+function openModal(id){
+  const a=animals.find(x=>x.id===id);
+  const modal=document.getElementById("modal-root");
+  modal.style.display="block";
+  modal.innerHTML=
+  `<div class='modal-bg' onclick='closeModal(event)'>
+      <div class='modal' onclick='event.stopPropagation()'>
+        <h2>${a.nome}</h2>
+        <p><strong>Espécie:</strong> ${a.especie}</p>
+        <p><strong>Idade:</strong> ${a.idade} anos</p>
+        <p><strong>Raça:</strong> ${a.raca}</p>
+        <p>${a.historia}</p>
+        <p><strong>Contacto:</strong> 915240059</p>
+        <p><strong>Email:</strong> coracaoanimal@gmail.com</p>
+        <button onclick='closeModal()'>Fechar</button>
+      </div>
+   </div>`;
+}
+
+function closeModal(){document.getElementById("modal-root").style.display="none";}
+
+function filtrar(){
+  let zona=f_zona.value.toLowerCase(),
+      tipo=f_tipo.value,
+      raca=f_raca.value.toLowerCase(),
+      idade=f_idade.value,
+      sexo=f_sexo.value,
+      tamanho=f_tamanho.value,
+      cor=f_cor.value.toLowerCase();
+
+  renderList(animals.filter(a=> 
+    (zona===""||a.zona.toLowerCase().includes(zona)) &&
+    (tipo==="todos"||a.especie===tipo) &&
+    (raca===""||a.raca.toLowerCase().includes(raca)) &&
+    (idade===""||a.idade<=Number(idade)) &&
+    (sexo==="Ambos"||a.sexo===sexo) &&
+    (tamanho==="Todos"||a.tamanho===tamanho) &&
+    (cor===""||a.cor.toLowerCase().includes(cor))
+  ));
+}
+
+function pesquisaTopo(){
+  let txt=pesquisa_topo.value.toLowerCase();
+  renderList(animals.filter(a=>a.nome.toLowerCase().includes(txt)));
+}
+
+function showAnunciar(){
+  document.getElementById("home-section").style.display="none";
+  document.getElementById("anunciar-page").style.display="block";
+}
+
+function showHome(){
+  document.getElementById("home-section").style.display="block";
+  document.getElementById("anunciar-page").style.display="none";
+}
+
+renderList(animals);
+
+function previewFoto(event){
+  const file = event.target.files[0];
+  if(!file) return;
+
+  const img = document.getElementById("imgPreview");
+  const texto = document.getElementById("foto_texto");
+
+  img.src = URL.createObjectURL(file);
+  img.style.display = "block";
+  texto.style.display = "none";
+}
+</script>
+
+</body>
+</html>
