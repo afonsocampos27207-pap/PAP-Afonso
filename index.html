@@ -95,7 +95,7 @@
     <input id="f_zona" type="text">
 
     <label>Tipo de animal:</label>
-    <select>
+    <select id="f_tipo">
       <option selected disabled>Escolher</option>
       <option value="todos">Todos</option>
       <option value="Cão">Cão</option>
@@ -110,7 +110,7 @@
     <input id="f_idade" type="number">
 
     <label>Sexo:</label>
-    <select>
+    <select id="f_sexo">
       <option selected disabled>Escolher</option>
       <option>Ambos</option>
       <option>Macho</option>
@@ -118,7 +118,7 @@
     </select>
 
     <label>Tamanho:</label>
-    <select>
+    <select id="f_tamanho">
       <option selected disabled>Escolher</option>
       <option>Todos</option>
       <option>Pequeno</option>
@@ -143,10 +143,10 @@
 
     <div class="form-left">
       <label>Nome do animal:</label>
-      <input type="text">
+      <input type="text" id="a_nome">
 
       <label>Tipo de animal:</label>
-      <select>
+      <select id="a_tipo">
         <option selected disabled>Escolher</option>
         <option>Cão</option>
         <option>Gato</option>
@@ -154,27 +154,27 @@
       </select>
 
       <label>Idade:</label>
-      <select>
+      <select id="a_idade">
         <option selected disabled>Escolher</option>
-        <option>1 ano</option>
-        <option>2 anos</option>
-        <option>3 anos</option>
-        <option>4 anos</option>
-        <option>5+ anos</option>
+        <option value="1">1 ano</option>
+        <option value="2">2 anos</option>
+        <option value="3">3 anos</option>
+        <option value="4">4 anos</option>
+        <option value="5">5+ anos</option>
       </select>
 
       <label>Sexo:</label>
-      <select>
+      <select id="a_sexo">
         <option selected disabled>Escolher</option>
         <option>Macho</option>
         <option>Fêmea</option>
       </select>
 
       <label>Raça:</label>
-      <input type="text">
+      <input type="text" id="a_raca">
 
       <label>Tamanho:</label>
-      <select>
+      <select id="a_tamanho">
         <option selected disabled>Escolher</option>
         <option>Pequeno</option>
         <option>Médio</option>
@@ -182,7 +182,7 @@
       </select>
 
       <label>Cor:</label>
-      <select>
+      <select id="a_cor">
         <option selected disabled>Escolher</option>
         <option>Preto</option>
         <option>Branco</option>
@@ -194,14 +194,14 @@
       </select>
 
       <label>Desparasitado:</label>
-      <select>
+      <select id="a_desparasitado">
         <option selected disabled>Escolher</option>
         <option>Sim</option>
         <option>Não</option>
       </select>
 
       <label>Vacinas:</label>
-      <select>
+      <select id="a_vacinas">
         <option selected disabled>Escolher</option>
         <option>Completo</option>
         <option>Em falta</option>
@@ -209,7 +209,7 @@
       </select>
 
       <label>Esterilizado:</label>
-      <select>
+      <select id="a_esterilizado">
         <option selected disabled>Escolher</option>
         <option>Sim</option>
         <option>Não</option>
@@ -233,7 +233,6 @@
   style="margin-top:20px;width:100%;font-size:18px;padding:10px;background:#0b4f32;color:white;border:none;border-radius:6px;cursor:pointer">
     Anunciar
   </button>
-
 </div>
 
 <div id="modal-root" style="display:none"></div>
@@ -254,7 +253,19 @@ const animals=[
   {id:"12",nome:"Lola",especie:"Coelho",idade:1,sexo:"Fêmea",tamanho:"Pequeno",cor:"Castanho",zona:"Leiria",raca:"Mini Rex",img:"",historia:"Muito tímida mas carinhosa."},
   {id:"13",nome:"Rocky",especie:"Cão",idade:5,sexo:"Macho",tamanho:"Grande",cor:"Preto",zona:"Faro",raca:"Rottweiler",img:"",historia:"Protector e muito leal."},
   {id:"14",nome:"Moka",especie:"Gato",idade:4,sexo:"Fêmea",tamanho:"Médio",cor:"Castanho",zona:"Coimbra",raca:"Siamês",img:"",historia:"Muito calma e carinhosa."},
-  {id:"15",nome:"Zeus",especie:"Coelho",idade:1,sexo:"Macho",tamanho:"Médio",cor:"Mini Rex",zona:"Lisboa",raca:"Pastor Branco",img:"",historia:"Amigável e calmo."}
+  {
+    id:"15",
+    nome:"Zeus",
+    especie:"Coelho",
+    idade:1,
+    sexo:"Macho",
+    tamanho:"Médio",
+    cor:"Branco",
+    zona:"Lisboa",
+    raca:"Mini Rex",
+    img:"",
+    historia:"Amigável e calmo."
+  }
 ];
 
 function renderList(list){
@@ -264,7 +275,7 @@ function renderList(list){
     const div=document.createElement("div");
     div.className="card";
     div.innerHTML=
-    `<img src="${a.img}">
+    `<img src="${a.img || 'https://via.placeholder.com/300x200?text=Sem+Imagem'}">
      <div class="card-body">
        <strong>${a.nome}</strong><br>
        Espécie: ${a.especie}<br>
@@ -300,10 +311,11 @@ function openModal(id){
       <button onclick='closeModal()'>Fechar</button>
     </div>
 </div>`;
-
 }
 
-function closeModal(){document.getElementById("modal-root").style.display="none";}
+function closeModal(){
+  document.getElementById("modal-root").style.display="none";
+}
 
 function filtrar(){
   let zona=f_zona.value.toLowerCase(),
